@@ -36,14 +36,12 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
             }
           };
 
-          const linkElement = article.querySelectorAll(
-            ".link_fs-link__J1sGD"
-          ) as NodeListOf<HTMLAnchorElement>;
-          let linkTitle = "";
+          const linkElement = article.querySelector(
+            ".productCard_productLinkInfo__It3J2"
+          ) as HTMLAnchorElement;
           let linkHref = "";
-          if (linkElement.length > 0) {
-            linkTitle = linkElement[1].title;
-            linkHref = linkElement[1].href;
+          if (linkElement) {
+            linkHref = linkElement.href;
           }
 
           const img = article.querySelector("img.imagen_plp");
@@ -66,9 +64,12 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
           const brandName = article.querySelector(
             ".BrandName_BrandNameTitle__Ain0w"
           );
+          const title = article.querySelector(
+            ".styles_name__qQJiK"
+          )
 
           const body: CouponScraped = {
-            name: linkTitle,
+            name: title?.textContent!,
             url: linkHref,
             images: imgURL ? [imgURL] : [],
             lowPrice: convertToNumber(priceWithDiscount?.textContent),
@@ -85,7 +86,7 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
 
       products = products.concat(data);
 
-      const nextButton = await page.$(".Pagination_nextPreviousLink__UYeAp");
+      const nextButton = await page.$('button[aria-label="Próxima Pagina"]');
 
       if (nextButton) {
         await nextButton.dispatchEvent("click");
@@ -94,10 +95,22 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
       }
     }
 
+    
+      // const nextButton = await page.$$('button[aria-label="Próxima Pagina"]');
+      // const lastButton = nextButton.pop()
+
+      // if (lastButton) {
+      //   await lastButton.dispatchEvent("click");
+      // } else {
+      //   break;
+      // }
+      // }
+
     if (!products.length)
       throw new Error("No se encontraron productos en el scrapeo");
 
   } catch (error: any) {
+    console.log(error)
     await logger(
       LogType.ERROR,
       error?.message ?? "No se pudo scrapear Exito",
