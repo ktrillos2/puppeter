@@ -27,14 +27,14 @@ export const scrapeHym = async ({ browser, url }: ScrapePageProps) => {
 
     do {
       let button = await page.$(
-        ".vtex-button.bw1.ba.fw5.v-mid.relative.pa0.lh-solid.br2.min-h-small.t-action--small.bg-action-primary.b--action-primary.c-on-action-primary.hover-bg-action-primary.hover-b--action-primary.hover-c-on-action-primary.pointer" // Selector que tiene el botón para cargar más productos
+        ".vtex-button bw1 ba fw5 v-mid relative pa0 lh-solid br2 min-h-small t-action--small bg-action-primary b--action-primary c-on-action-primary hover-bg-action-primary hover-b--action-primary hover-c-on-action-primary pointer " // Selector que tiene el botón para cargar más productos
       );
 
       if (!button) break;
 
       button?.click();
       await page.waitForSelector(
-        ".vtex-button.bw1.ba.fw5.v-mid.relative.pa0.lh-solid.br2.min-h-small.t-action--small.bg-action-primary.b--action-primary.c-on-action-primary.hover-bg-action-primary.hover-b--action-primary.hover-c-on-action-primary.pointer"
+        ".vtex-button bw1 ba fw5 v-mid relative pa0 lh-solid br2 min-h-small t-action--small bg-action-primary b--action-primary c-on-action-primary hover-bg-action-primary hover-b--action-primary hover-c-on-action-primary pointer "
       );
       await autoScroll(page);
       count += 1;
@@ -77,7 +77,7 @@ export const scrapeHym = async ({ browser, url }: ScrapePageProps) => {
         );
 
         const priceWithoutDiscountElement = article.querySelector(
-          "span.vtex-product-price-1-x-listPrice.vtex-product-price-1-x-listPrice--bestPrice"
+          "span.vtex-product-price-1-x-listPriceValue"
         );
 
         const discountElement = article.querySelector(
@@ -108,6 +108,7 @@ export const scrapeHym = async ({ browser, url }: ScrapePageProps) => {
     );
 
     products = data;
+    console.log(data)
   } catch (error: any) {
     await logger(
       LogType.ERROR,
