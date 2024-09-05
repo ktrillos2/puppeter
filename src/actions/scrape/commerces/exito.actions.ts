@@ -44,7 +44,7 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
             linkHref = linkElement.href;
           }
 
-          const img = article.querySelector("img.imagen_plp");
+          const img = article.querySelector('img[src*="exitocol.vtexassets.com"]');
 
           let imgURL = "";
           if (img) {
