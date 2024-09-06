@@ -95,17 +95,6 @@ export const scrapeExito = async ({ browser, url }: ScrapePageProps) => {
       }
     }
 
-    
-      // const nextButton = await page.$$('button[aria-label="Próxima Pagina"]');
-      // const lastButton = nextButton.pop()
-
-      // if (lastButton) {
-      //   await lastButton.dispatchEvent("click");
-      // } else {
-      //   break;
-      // }
-      // }
-
     if (!products.length)
       throw new Error("No se encontraron productos en el scrapeo");
 
